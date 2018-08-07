@@ -36,6 +36,7 @@ from cirq.circuits import (
     DropNegligible,
     ExpandComposite,
     InsertStrategy,
+    MergeInteractions,
     MergeSingleQubitGates,
     Moment,
     OptimizationPass,
