@@ -120,6 +120,32 @@ class NoiseModel(metaclass=value.ABCMetaImplementAnyOneOf):
             noisy version of the given operation.
         """
 
+    def substituted_system_qubits(self, moments: 'Iterable[cirq.Moment]',
+                                  system_qubits: Sequence['cirq.Qid']
+                                 ) -> Sequence['cirq.Qid']:
+        """Returns the list of qubits that this noise model will output
+        operations on when applied to the given moments and qubits.
+
+        Most noise models will simply return `system_qubits` unchanged.  If the
+        noise model needs to use different or additional qubits, a new list is
+        returned.  For example, if the noise model models qubit leakage, it may
+        return qutrit versions of the given qubits.  A noise model that models
+        coherent interaction with the environment may return additional qubits
+        appended to the end of the list.
+
+        The returned qubits should be in the same order with any additional
+        qubits at the end such that the noise model `Gate.on(system_qubits[i])`
+        maps to `NoisyGate.on(substituted_qubits[i])`.
+
+        For subclasses, the default implementation returns `system_qubits`
+        unchanged.
+
+        Args:
+            moments: The moments to add noise to.
+            system_qubits: A list of all qubits in the system.
+        """
+        return system_qubits
+
 
 @value.value_equality
 class _NoNoiseModel(NoiseModel):

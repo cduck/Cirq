@@ -230,6 +230,7 @@ class DensityMatrixSimulator(simulator.SimulatesSamples,
             perform_measurements: bool = True) -> Iterator:
         qubits = ops.QubitOrder.as_qubit_order(qubit_order).order_for(
             circuit.all_qubits())
+        qubits = tuple(self.noise.substituted_system_qubits(circuit, qubits))
         qid_shape = protocols.qid_shape(qubits)
         qubit_map = {q: i for i, q in enumerate(qubits)}
         initial_matrix = density_matrix_utils.to_valid_density_matrix(
